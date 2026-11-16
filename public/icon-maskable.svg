@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" fill="#090B0E"/>
+  <!-- Keep artwork inside 70% central safe zone for maskable icon cropping -->
+  <g transform="translate(76, 76) scale(0.703)">
+    <rect x="24" y="24" width="464" height="464" rx="92" fill="#11151B" stroke="#F97316" stroke-opacity="0.45" stroke-width="10"/>
+    <rect x="96" y="168" width="320" height="176" rx="44" fill="#181E27" stroke="#334155" stroke-width="10"/>
+    <path d="M168 212v88M124 256h88" stroke="#F8FAFC" stroke-width="28" stroke-linecap="round"/>
+    <circle cx="322" cy="236" r="18" fill="#F97316"/>
+    <circle cx="362" cy="272" r="18" fill="#F59E0B"/>
+  </g>
+</svg>

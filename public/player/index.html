@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ngames Player Runtime</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #090b0e;
+        color: #f1f5f9;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+
+      #game-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      #game {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #game > *,
+      #game canvas {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #standby {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+        background: radial-gradient(circle at center, #141923 0%, #090b0e 70%);
+      }
+
+      #standby.hidden {
+        display: none;
+      }
+
+      .standby-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        color: #f8fafc;
+      }
+
+      .standby-desc {
+        font-size: 13px;
+        color: #94a3b8;
+        max-width: 360px;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      .error-box {
+        margin-top: 16px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        background: rgba(127, 29, 29, 0.25);
+        color: #fca5a5;
+        font-size: 12px;
+        max-width: 420px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-container">
+      <div id="game"></div>
+      <div id="standby">
+        <p class="standby-title" id="standby-title">EmulatorJS Runtime Ready</p>
+        <p class="standby-desc" id="standby-desc">
+          Waiting for a validated ROM image from ngames. Local files and BIOS attachments stay inside your browser session.
+        </p>
+        <div id="error-box" class="error-box" style="display: none;"></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        let booted = false;
+        let currentRomName = "ngames_session";
+        const standby = document.getElementById("standby");
+        const standbyTitle = document.getElementById("standby-title");
+        const standbyDesc = document.getElementById("standby-desc");
+        const errorBox = document.getElementById("error-box");
+
+        function postToParent(type, payload) {
+          try {
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage({ type: type, payload: payload || {} }, "*");
+            }
+          } catch (err) {
+            console.warn("Unable to postMessage to parent:", err);
+          }
+        }
+
+        function postDebug(level, message, progress) {
+          postToParent("NGAMES_DEBUG_LOG", {
+            level: level,
+            source: "emulator",
+            message: message,
+            progress: typeof progress === "number" ? progress : undefined
+          });
+        }
+
+        // Observe real XHR core / ROM downloads to feed live % into the footer progress debug bar
+        (function installXhrMonitor() {
+          if (!window.XMLHttpRequest || window.__ngamesXhrHooked) return;
+          window.__ngamesXhrHooked = true;
+          const origOpen = XMLHttpRequest.prototype.open;
+          const origSend = XMLHttpRequest.prototype.send;
+
+          XMLHttpRequest.prototype.open = function (method, url) {
+            this.__ngamesUrl = typeof url === "string" ? url : String(url || "");
+            return origOpen.apply(this, arguments);
+          };
+
+          XMLHttpRequest.prototype.send = function () {
+            const rawUrl = this.__ngamesUrl || "";
+            if (rawUrl && !rawUrl.startsWith("blob:") && !rawUrl.startsWith("data:")) {
+              const label = rawUrl.split("?")[0].split("/").pop() || rawUrl;
+              let lastSent = 0;
+
+              this.addEventListener("progress", function (evt) {
+                if (!evt.lengthComputable || evt.total <= 0) return;
+                const now = Date.now();
+                const pct = Math.min(100, Math.round((evt.loaded / evt.total) * 100));
+                if (pct === 100 || now - lastSent >= 280) {
+                  lastSent = now;
+                  postDebug("loading", "Loading " + label + " (" + pct + "%)", pct);
+                }
+              });
+
+              this.addEventListener("load", function () {
+                if (this.status >= 400) {
+                  postDebug("error", "HTTP " + this.status + " loading " + label);
+                } else {
+                  postDebug("info", "Fetched " + label, 100);
+                }
+              });
+
+              this.addEventListener("error", function () {
+                postDebug("error", "Network/CORS failure fetching " + label);
+              });
+            }
+            return origSend.apply(this, arguments);
+          };
+        })();
+
+        window.addEventListener("error", function (event) {
+          const msg = event && event.message ? event.message : "Runtime script error";
+          postDebug("error", msg);
+          if (!standby.classList.contains("hidden")) {
+            showError(msg);
+          }
+        });
+
+        window.addEventListener("unhandledrejection", function (event) {
+          const reason = event && event.reason;
+          const msg = reason && reason.message ? reason.message : String(reason || "Async emulator failure");
+          postDebug("error", msg);
+          if (!standby.classList.contains("hidden")) {
+            showError(msg);
+          }
+        });
+
+        function showError(message) {
+          standby.classList.remove("hidden");
+          standbyTitle.textContent = "Playback Initialization Error";
+          standbyDesc.textContent = "The emulator runtime could not start this ROM image.";
+          errorBox.style.display = "block";
+          errorBox.textContent = message;
+          postDebug("error", message);
+          postToParent("NGAMES_PLAYER_ERROR", { message: message });
+        }
+
+        function extractMameShortname(cfg) {
+          const candidates = [
+            typeof cfg.romUrl === "string" ? cfg.romUrl : "",
+            cfg.romFileName,
+            cfg.gameName
+          ];
+          for (let i = 0; i < candidates.length; i++) {
+            const raw = candidates[i];
+            if (!raw || typeof raw !== "string") continue;
+            const tail = raw.split("#")[0].split("?")[0].split("/").pop() || "";
+            let decoded = tail;
+            try {
+              decoded = decodeURIComponent(tail);
+            } catch (e) {}
+            const clean = decoded.replace(/\.(zip|7z|rar|chd)$/i, "").trim();
+            if (clean) {
+              return clean.replace(/[^A-Za-z0-9_-]/g, "");
+            }
+          }
+          return "";
+        }
+
+        const NEOGEO_SHORTNAME_RE =
+          /^(kof|mslug|samsh|fatfur|rbff|artof|aof|garou|lastbl|sengok|wakuwak|ssideki|turfmast|blazstar|pulstar|viewpoin|magdrop|pbobbl|bstars|2020bb|tophuntr|cyberlip|nam1975|matrimee|doubledr|ctomaday|neobombe|neocup98|neodrift|neomrdo|ninjamas|nitd|overtop|panicbom|preisle2|pspikes2|ragnagrd|rotd|shocktr|socbrawl|sonicwi2|sonicwi3|spinmast|stakwin|strhoop|superspy|svc|twinspri|tws96|vliner|wh1|wh2|whp|windjamm|wjammers|zedblade|zintrckb|zupapa|androdun|alpham2|bakatono|bangbead|bjourney|breakers|breakrev|burningf|cabalng|crswd2bl|crsword|diggerma|eightman|fbfrenzy|fightfev|flipshot|galaxyfg|ganryu|ghostlop|goalx3|gowcaizr|gpilots|gururin|irrmaze|janshin|jockeygp|joyjoy|kabukikl|karnovr|kf2k|kizuna|kotm|lbowling|legendos|lresort|maglord|marukodq|miexchng|minasan|moshougi|mutnat|ncombat|ncommand|neogeo|pgoal|pnyaa|popbounc|powgear|puzzldpr|quizdai|quizkof|ridhero|roboarmy|s1945p|savagere|sdodgeb|trally|neopong)/i;
+
+        function isNeoGeoGame(cfg) {
+          if (!cfg) return false;
+          if (cfg.isNeoGeo === true || cfg.category === "neogeo") return true;
+          const shortname = extractMameShortname(cfg);
+          if (shortname && NEOGEO_SHORTNAME_RE.test(shortname)) return true;
+          const fileStem = typeof cfg.romFileName === "string"
+            ? cfg.romFileName.replace(/\.(zip|7z|rar|chd)$/i, "").trim()
+            : "";
+          if (fileStem && NEOGEO_SHORTNAME_RE.test(fileStem)) return true;
+          if (typeof cfg.gameName === "string" && /neo[\s-]*geo/i.test(cfg.gameName)) return true;
+          return false;
+        }
+
+        let neoGeoHookInterval = null;
+
+        function resetRuntimeForReload() {
+          booted = false;
+          if (neoGeoHookInterval) {
+            clearInterval(neoGeoHookInterval);
+            neoGeoHookInterval = null;
+          }
+          const gameEl = document.getElementById("game");
+          if (gameEl) gameEl.innerHTML = "";
+          const prevLoaders = document.querySelectorAll('script[data-ngames-ejs="1"]');
+          prevLoaders.forEach(function (node) { node.remove(); });
+          try {
+            delete window.EJS_emulator;
+          } catch (e) {
+            window.EJS_emulator = undefined;
+          }
+          window.EJS_biosUrl = undefined;
+          window.EJS_externalFiles = undefined;
+        }
+
+        async function bootEmulator(config) {
+          if (booted) {
+            resetRuntimeForReload();
+          }
+          booted = true;
+
+          try {
+            if (!config || !config.core) {
+              showError("Missing target EmulatorJS core identifier.");
+              return;
+            }
+
+            currentRomName = config.romFileName || config.gameName || "ngames_session";
+            standbyTitle.textContent = "Booting " + (config.gameName || "ROM") + "...";
+            standbyDesc.textContent = "Initializing EmulatorJS (" + config.core + " core).";
+            postDebug("loading", "Booting " + (config.gameName || currentRomName) + " [" + config.core + "]...", 10);
+
+            let gameSource = null;
+            if (config.romBuffer) {
+              const fileName = config.romFileName || "game.rom";
+              gameSource = new File([config.romBuffer], fileName);
+            } else if (config.romUrl) {
+              gameSource = config.romUrl;
+            }
+
+            if (!gameSource) {
+              showError("No ROM buffer or authorized URL was provided.");
+              return;
+            }
+
+            const dataBaseUrl = new URL("../emulator/data/", window.location.href).href;
+
+            window.EJS_player = "#game";
+            window.EJS_core = config.core;
+            window.EJS_gameUrl = gameSource;
+            window.EJS_gameName = config.gameName || "ngames Session";
+
+            // Scoped strictly to mame2003_plus: leave fbneo and all other cores completely untouched
+            if (config.core === "mame2003_plus") {
+              const cleanRomShortname = extractMameShortname(config);
+              if (cleanRomShortname) {
+                window.EJS_gameName = cleanRomShortname;
+                if (config.romBuffer) {
+                  window.EJS_gameUrl = new File([config.romBuffer], cleanRomShortname + ".zip");
+                }
+                postDebug("info", "MAME 2003+ driver shortname set: " + cleanRomShortname);
+              }
+            }
+
+            window.EJS_pathtodata = dataBaseUrl;
+            window.EJS_color = config.color || "#F97316";
+            window.EJS_backgroundColor = "#090B0E";
+            window.EJS_startOnLoaded = config.startOnLoaded !== false;
+            window.EJS_disableDatabases = false;
+            window.EJS_threads = false;
+
+            window.EJS_defaultOptions = {
+              "save-state-location": "browser",
+              "shader": config.shader || "disabled",
+              "webgl2Enabled": "enabled"
+            };
+
+            if (config.gamepadMapping && typeof config.gamepadMapping === "object") {
+              const btnLabels = {
+                0: "BUTTON_1",
+                1: "BUTTON_2",
+                2: "BUTTON_3",
+                3: "BUTTON_4",
+                4: "LEFT_TOP_SHOULDER",
+                5: "RIGHT_TOP_SHOULDER",
+                6: "LEFT_BOTTOM_SHOULDER",
+                7: "RIGHT_BOTTOM_SHOULDER",
+                8: "SELECT",
+                9: "START",
+                10: "LEFT_STICK",
+                11: "RIGHT_STICK",
+                12: "DPAD_UP",
+                13: "DPAD_DOWN",
+                14: "DPAD_LEFT",
+                15: "DPAD_RIGHT"
+              };
+              const toValue2 = function (idx) {
+                return btnLabels[idx] || String(idx);
+              };
+              const gm = config.gamepadMapping;
+              window.EJS_defaultControls = {
+                0: {
+                  0: { value: "x", value2: toValue2(gm.bButton ?? 0) },
+                  1: { value: "s", value2: toValue2(gm.yButton ?? 2) },
+                  2: { value: "v", value2: toValue2(gm.selectButton ?? 8) },
+                  3: { value: "enter", value2: toValue2(gm.startButton ?? 9) },
+                  4: { value: "up arrow", value2: "DPAD_UP" },
+                  5: { value: "down arrow", value2: "DPAD_DOWN" },
+                  6: { value: "left arrow", value2: "DPAD_LEFT" },
+                  7: { value: "right arrow", value2: "DPAD_RIGHT" },
+                  8: { value: "z", value2: toValue2(gm.aButton ?? 1) },
+                  9: { value: "a", value2: toValue2(gm.xButton ?? 3) },
+                  10: { value: "q", value2: toValue2(gm.lButton ?? 4) },
+                  11: { value: "e", value2: toValue2(gm.rButton ?? 5) },
+                  12: { value: "tab", value2: "LEFT_BOTTOM_SHOULDER" },
+                  13: { value: "r", value2: "RIGHT_BOTTOM_SHOULDER" },
+                  14: { value: "", value2: "LEFT_STICK" },
+                  15: { value: "", value2: "RIGHT_STICK" },
+                  16: { value: "h", value2: "LEFT_STICK_X:+1" },
+                  17: { value: "f", value2: "LEFT_STICK_X:-1" },
+                  18: { value: "g", value2: "LEFT_STICK_Y:+1" },
+                  19: { value: "t", value2: "LEFT_STICK_Y:-1" },
+                  20: { value: "l", value2: "RIGHT_STICK_X:+1" },
+                  21: { value: "j", value2: "RIGHT_STICK_X:-1" },
+                  22: { value: "k", value2: "RIGHT_STICK_Y:+1" },
+                  23: { value: "i", value2: "RIGHT_STICK_Y:-1" },
+                  24: { value: "1" },
+                  25: { value: "2" },
+                  26: { value: "3" }
+                },
+                1: {},
+                2: {},
+                3: {}
+              };
+            }
+
+            if (typeof config.volume === "number") {
+              window.EJS_volume = config.volume;
+            }
+
+            const defaultNeoGeoBiosUrl = new URL("../bios/neogeo.zip", window.location.href).href;
+            const isNeoGeoCore = config.core === "fbneo" || config.core === "mame2003_plus";
+            const isNeoGeo = isNeoGeoGame(config);
+            let vaultNeoGeoEntry = null;
+            let neoGeoZipBytes = null;
+            let customVaultBiosFile = null;
+            const extraVaultBiosFiles = [];
+
+            if (isNeoGeo && config.biosBuffer && config.biosFileName && /^neogeo\.zip$/i.test(config.biosFileName)) {
+              vaultNeoGeoEntry = { name: config.biosFileName, buffer: config.biosBuffer };
+            } else if (isNeoGeo && Array.isArray(config.extraBiosFiles)) {
+              vaultNeoGeoEntry =
+                config.extraBiosFiles.find(function (entry) {
+                  return entry && entry.name && entry.buffer && /^neogeo\.zip$/i.test(entry.name);
+                }) || null;
+            }
+
+            if (isNeoGeo && isNeoGeoCore) {
+              if (vaultNeoGeoEntry) {
+                neoGeoZipBytes = new Uint8Array(vaultNeoGeoEntry.buffer);
+                window.EJS_biosUrl = URL.createObjectURL(new Blob([vaultNeoGeoEntry.buffer]));
+                postDebug(
+                  "info",
+                  "Using Neo Geo BIOS from local BIOS Vault (" + vaultNeoGeoEntry.name + ")"
+                );
+              } else {
+                window.EJS_biosUrl = defaultNeoGeoBiosUrl;
+                postDebug("info", "Using self-hosted Neo Geo BIOS: " + defaultNeoGeoBiosUrl);
+                try {
+                  const biosResp = await fetch(defaultNeoGeoBiosUrl);
+                  if (biosResp.ok) {
+                    neoGeoZipBytes = new Uint8Array(await biosResp.arrayBuffer());
+                  }
+                } catch (e) {}
+              }
+            } else if (
+              config.biosBuffer &&
+              config.biosFileName &&
+              !(!isNeoGeo && /^neogeo\.zip$/i.test(config.biosFileName))
+            ) {
+              customVaultBiosFile = {
+                name: config.biosFileName,
+                bytes: new Uint8Array(config.biosBuffer)
+              };
+              if (/\.zip$/i.test(config.biosFileName)) {
+                window.EJS_biosUrl = URL.createObjectURL(new Blob([config.biosBuffer]));
+              }
+            } else if (config.biosUrl) {
+              window.EJS_biosUrl = config.biosUrl;
+            }
+
+            if (Array.isArray(config.extraBiosFiles)) {
+              config.extraBiosFiles.forEach(function (entry) {
+                if (!entry || !entry.name || !entry.buffer) return;
+                if (!isNeoGeo && /^neogeo\.zip$/i.test(entry.name)) return;
+                if (isNeoGeo && isNeoGeoCore && vaultNeoGeoEntry && /^neogeo\.zip$/i.test(entry.name)) {
+                  return;
+                }
+                extraVaultBiosFiles.push({
+                  name: entry.name,
+                  bytes: new Uint8Array(entry.buffer)
+                });
+              });
+            }
+
+            let vfsBiosMounted = false;
+            function mountBiosToFS(fs) {
+              if (!fs || vfsBiosMounted) return;
+              vfsBiosMounted = true;
+              const ensureDir = function (dirPath) {
+                const parts = dirPath.split("/");
+                let cur = "";
+                for (let i = 0; i < parts.length; i++) {
+                  if (!parts[i]) continue;
+                  cur += "/" + parts[i];
+                  try {
+                    if (!fs.analyzePath(cur).exists) {
+                      fs.mkdir(cur);
+                    }
+                  } catch (e) {}
+                }
+              };
+              const writeBytesAt = function (targetPath, bytes) {
+                try {
+                  const slashIdx = targetPath.lastIndexOf("/");
+                  const parentDir = slashIdx > 0 ? targetPath.substring(0, slashIdx) : "";
+                  if (parentDir) ensureDir(parentDir);
+                  if (fs.analyzePath(targetPath).exists) {
+                    try { fs.unlink(targetPath); } catch (e) {}
+                  }
+                  fs.writeFile(targetPath, bytes);
+                } catch (e) {
+                  postDebug(
+                    "warn",
+                    "Could not write " + targetPath + ": " + (e && e.message ? e.message : e)
+                  );
+                }
+              };
+
+              if (isNeoGeo && isNeoGeoCore && neoGeoZipBytes) {
+                writeBytesAt("/neogeo.zip", neoGeoZipBytes);
+                writeBytesAt("/home/web_user/retroarch/system/neogeo.zip", neoGeoZipBytes);
+                writeBytesAt("/home/web_user/retroarch/system/fbneo/neogeo.zip", neoGeoZipBytes);
+                writeBytesAt("/home/web_user/retroarch/system/mame2003-plus/neogeo.zip", neoGeoZipBytes);
+                postDebug(
+                  "info",
+                  "Mounted intact neogeo.zip (" + neoGeoZipBytes.byteLength + " B) in RetroArch VFS"
+                );
+              } else if (customVaultBiosFile) {
+                writeBytesAt("/" + customVaultBiosFile.name, customVaultBiosFile.bytes);
+                writeBytesAt(
+                  "/home/web_user/retroarch/system/" + customVaultBiosFile.name,
+                  customVaultBiosFile.bytes
+                );
+                postDebug("info", "Mounted BIOS " + customVaultBiosFile.name + " in RetroArch VFS");
+              }
+
+              for (let i = 0; i < extraVaultBiosFiles.length; i++) {
+                const extraBios = extraVaultBiosFiles[i];
+                writeBytesAt("/" + extraBios.name, extraBios.bytes);
+                writeBytesAt("/home/web_user/retroarch/system/" + extraBios.name, extraBios.bytes);
+              }
+            }
+
+            const shouldHookBiosVfs = Boolean(
+              (isNeoGeo && isNeoGeoCore && neoGeoZipBytes) ||
+                customVaultBiosFile ||
+                extraVaultBiosFiles.length > 0
+            );
+            let neoGeoHookAttached = false;
+            function attachBiosVfsHook() {
+              if (!shouldHookBiosVfs) return;
+              const emu = window.EJS_emulator;
+              if (!emu) return;
+              if (!neoGeoHookAttached && typeof emu.on === "function") {
+                neoGeoHookAttached = true;
+                emu.on("saveDatabaseLoaded", mountBiosToFS);
+              }
+              if (emu.gameManager && emu.gameManager.FS) {
+                mountBiosToFS(emu.gameManager.FS);
+              }
+              if (neoGeoHookInterval) {
+                clearInterval(neoGeoHookInterval);
+                neoGeoHookInterval = null;
+              }
+            }
+
+            const externalMap = {};
+            if (Array.isArray(config.extraDiscFiles)) {
+              config.extraDiscFiles.forEach(function (entry) {
+                if (entry && entry.name && entry.buffer) {
+                  externalMap["/" + entry.name] = URL.createObjectURL(new Blob([entry.buffer]));
+                }
+              });
+            }
+            if (Object.keys(externalMap).length > 0) {
+              window.EJS_externalFiles = externalMap;
+            }
+
+            window.EJS_ready = function () {
+              attachBiosVfsHook();
+              standby.classList.add("hidden");
+              postDebug("info", "Core ready (" + config.core + ") — waiting for frame start");
+              postToParent("NGAMES_EMULATOR_READY", {
+                core: config.core,
+                gameName: config.gameName
+              });
+            };
+
+            window.EJS_onGameStart = function () {
+              if (neoGeoHookInterval) {
+                clearInterval(neoGeoHookInterval);
+                neoGeoHookInterval = null;
+              }
+              standby.classList.add("hidden");
+              postDebug("success", "Running " + (config.gameName || currentRomName) + " [" + config.core + "]", 100);
+              postToParent("NGAMES_GAME_STARTED", {
+                core: config.core,
+                gameName: config.gameName
+              });
+            };
+
+            if (shouldHookBiosVfs) {
+              neoGeoHookInterval = setInterval(attachBiosVfsHook, 10);
+            }
+
+            const loaderScript = document.createElement("script");
+            loaderScript.setAttribute("data-ngames-ejs", "1");
+            loaderScript.src = dataBaseUrl + "loader.js";
+            loaderScript.onerror = function () {
+              if (neoGeoHookInterval) {
+                clearInterval(neoGeoHookInterval);
+                neoGeoHookInterval = null;
+              }
+              showError("Failed to load self-hosted EmulatorJS loader at " + dataBaseUrl + "loader.js.");
+            };
+            document.body.appendChild(loaderScript);
+          } catch (err) {
+            showError(err && err.message ? err.message : "Unexpected error starting EmulatorJS.");
+          }
+        }
+
+        async function handleQuickSave(slot) {
+          try {
+            const emu = window.EJS_emulator;
+            if (!emu || !emu.gameManager || !emu.storage || !emu.storage.states) {
+              postToParent("NGAMES_SAVE_RESULT", {
+                ok: false,
+                slot: slot,
+                message: "Start the game first before saving state."
+              });
+              return;
+            }
+            const state = emu.gameManager.getState();
+            const base = emu.getBaseFileName ? emu.getBaseFileName() : currentRomName;
+            const key = base + ".slot" + slot + ".state";
+            await emu.storage.states.put(key, state);
+            if (emu.displayMessage) {
+              emu.displayMessage("Saved to Slot " + slot);
+            }
+            postToParent("NGAMES_SAVE_RESULT", {
+              ok: true,
+              slot: slot,
+              bytes: state.byteLength,
+              message: "Saved Slot " + slot + " (" + Math.round(state.byteLength / 1024) + " KB)"
+            });
+          } catch (err) {
+            postToParent("NGAMES_SAVE_RESULT", {
+              ok: false,
+              slot: slot,
+              message: err && err.message ? err.message : "Quick save failed."
+            });
+          }
+        }
+
+        async function handleQuickLoad(slot) {
+          try {
+            const emu = window.EJS_emulator;
+            if (!emu || !emu.gameManager || !emu.storage || !emu.storage.states) {
+              postToParent("NGAMES_LOAD_RESULT", {
+                ok: false,
+                slot: slot,
+                message: "Start the game first before loading state."
+              });
+              return;
+            }
+            const base = emu.getBaseFileName ? emu.getBaseFileName() : currentRomName;
+            const key = base + ".slot" + slot + ".state";
+            const saved = await emu.storage.states.get(key);
+            if (!saved) {
+              postToParent("NGAMES_LOAD_RESULT", {
+                ok: false,
+                slot: slot,
+                message: "No save state found in Slot " + slot + "."
+              });
+              return;
+            }
+            const bytes = saved instanceof Uint8Array ? saved : new Uint8Array(saved);
+            emu.gameManager.loadState(bytes);
+            if (emu.displayMessage) {
+              emu.displayMessage("Loaded Slot " + slot);
+            }
+            postToParent("NGAMES_LOAD_RESULT", {
+              ok: true,
+              slot: slot,
+              message: "Loaded Slot " + slot
+            });
+          } catch (err) {
+            postToParent("NGAMES_LOAD_RESULT", {
+              ok: false,
+              slot: slot,
+              message: err && err.message ? err.message : "Quick load failed."
+            });
+          }
+        }
+
+        function handleSetShader(shader) {
+          try {
+            const emu = window.EJS_emulator;
+            if (!emu || typeof emu.changeSettingOption !== "function") return;
+            emu.changeSettingOption("shader", shader || "disabled");
+          } catch (err) {
+            console.warn("Shader switch error:", err);
+          }
+        }
+
+        function handleSetVolume(volume) {
+          try {
+            const emu = window.EJS_emulator;
+            if (!emu) return;
+            if (typeof emu.setVolume === "function") {
+              emu.setVolume(volume);
+            }
+          } catch (err) {
+            console.warn("Volume control error:", err);
+          }
+        }
+
+        window.addEventListener("message", function (event) {
+          if (event.origin !== window.location.origin) return;
+          const data = event.data;
+          if (!data || typeof data !== "object") return;
+
+          if (data.type === "NGAMES_LOAD_GAME") {
+            void bootEmulator(data.payload);
+          } else if (data.type === "NGAMES_QUICK_SAVE") {
+            void handleQuickSave((data.payload && data.payload.slot) || 1);
+          } else if (data.type === "NGAMES_QUICK_LOAD") {
+            void handleQuickLoad((data.payload && data.payload.slot) || 1);
+          } else if (data.type === "NGAMES_SET_SHADER") {
+            handleSetShader(data.payload && data.payload.shader);
+          } else if (data.type === "NGAMES_SET_VOLUME") {
+            handleSetVolume(data.payload && data.payload.volume);
+          }
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const queryCore = params.get("core");
+        const queryRomUrl = params.get("romUrl");
+        const queryName = params.get("name");
+        if (queryCore && queryRomUrl) {
+          void bootEmulator({
+            core: queryCore,
+            romUrl: queryRomUrl,
+            gameName: queryName || "External ROM",
+            startOnLoaded: true
+          });
+        } else {
+          postToParent("NGAMES_PLAYER_READY", {});
+        }
+      })();
+    </script>
+  </body>
+</html>

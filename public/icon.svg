@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="112" fill="#090B0E"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" fill="#11151B" stroke="#F97316" stroke-opacity="0.35" stroke-width="8"/>
+  <!-- Stylized arcade D-pad + action buttons inside safe zone -->
+  <rect x="96" y="168" width="320" height="176" rx="44" fill="#181E27" stroke="#334155" stroke-width="8"/>
+  <path d="M168 212v88M124 256h88" stroke="#F8FAFC" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="322" cy="236" r="18" fill="#F97316"/>
+  <circle cx="362" cy="272" r="18" fill="#F59E0B"/>
+  <rect x="234" y="266" width="22" height="10" rx="5" fill="#64748B"/>
+  <rect x="266" y="266" width="22" height="10" rx="5" fill="#64748B"/>
+</svg>

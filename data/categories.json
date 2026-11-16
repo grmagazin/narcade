@@ -1,0 +1,47 @@
+[
+  {
+    "id": "all",
+    "name": "All Genres",
+    "description": "Complete catalog across every console and arcade genre."
+  },
+  {
+    "id": "arcade",
+    "name": "Arcade",
+    "description": "Classic coin-op cabinets and high-score chase experiences."
+  },
+  {
+    "id": "platformer",
+    "name": "Platformer",
+    "description": "Precision jump-and-run and vertical climbing titles."
+  },
+  {
+    "id": "shooter",
+    "name": "Shooter",
+    "description": "Horizontal and vertical shoot-em-up space action."
+  },
+  {
+    "id": "racing",
+    "name": "Racing",
+    "description": "Arcade time-trial and coastal highway racers."
+  },
+  {
+    "id": "rpg",
+    "name": "RPG",
+    "description": "Turn-based, tactical, and expedition role-playing adventures."
+  },
+  {
+    "id": "puzzle",
+    "name": "Puzzle",
+    "description": "Logic, city-building, and spatial strategy games."
+  },
+  {
+    "id": "action",
+    "name": "Action",
+    "description": "Fast-paced arcade combat and exploration."
+  },
+  {
+    "id": "utility",
+    "name": "Test & Utility",
+    "description": "Open-source calibration suites and hardware test ROMs."
+  }
+]

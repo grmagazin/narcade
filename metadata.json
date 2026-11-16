@@ -1,0 +1,6 @@
+{
+  "name": "ngames",
+  "description": "Independent static-first retro gaming portal powered by EmulatorJS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

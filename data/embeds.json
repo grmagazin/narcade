@@ -1,0 +1,507 @@
+[
+  {
+    "id": "embed-galaga88",
+    "title": "Galaga '88",
+    "systemId": "arcade",
+    "category": "shooter",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_galaga88",
+    "coverUrl": "https://archive.org/services/img/arcade_galaga88",
+    "detailsUrl": "https://archive.org/details/arcade_galaga88"
+  },
+  {
+    "id": "embed-galaxian",
+    "title": "Galaxian",
+    "systemId": "arcade",
+    "category": "shooter",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/galaxian_mame",
+    "coverUrl": "https://archive.org/services/img/galaxian_mame",
+    "detailsUrl": "https://archive.org/details/galaxian_mame"
+  },
+  {
+    "id": "embed-frogger",
+    "title": "Frogger",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/frogger_mame",
+    "coverUrl": "https://archive.org/services/img/frogger_mame",
+    "detailsUrl": "https://archive.org/details/frogger_mame"
+  },
+  {
+    "id": "embed-pacmanbla",
+    "title": "Pac-Man (Arcade)",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/pacmanbla",
+    "coverUrl": "https://archive.org/services/img/pacmanbla",
+    "detailsUrl": "https://archive.org/details/pacmanbla"
+  },
+  {
+    "id": "embed-pacman3",
+    "title": "Pac-Man (MAME Rev 3)",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/pacman_mame_3",
+    "coverUrl": "https://archive.org/services/img/pacman_mame_3",
+    "detailsUrl": "https://archive.org/details/pacman_mame_3"
+  },
+  {
+    "id": "embed-pacplus",
+    "title": "Pac-Man Plus",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/pacplus_mame_2",
+    "coverUrl": "https://archive.org/services/img/pacplus_mame_2",
+    "detailsUrl": "https://archive.org/details/pacplus_mame_2"
+  },
+  {
+    "id": "embed-jrpacman",
+    "title": "Jr. Pac-Man",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/jrpacman_mame",
+    "coverUrl": "https://archive.org/services/img/jrpacman_mame",
+    "detailsUrl": "https://archive.org/details/jrpacman_mame"
+  },
+  {
+    "id": "embed-mspacman",
+    "title": "Ms. Pac-Man",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/mspacman_mame",
+    "coverUrl": "https://archive.org/services/img/mspacman_mame",
+    "detailsUrl": "https://archive.org/details/mspacman_mame"
+  },
+  {
+    "id": "embed-btime",
+    "title": "BurgerTime",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/btime",
+    "coverUrl": "https://archive.org/services/img/btime",
+    "detailsUrl": "https://archive.org/details/btime"
+  },
+  {
+    "id": "embed-popeye",
+    "title": "Popeye",
+    "systemId": "arcade",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/popeye_mame",
+    "coverUrl": "https://archive.org/services/img/popeye_mame",
+    "detailsUrl": "https://archive.org/details/popeye_mame"
+  },
+  {
+    "id": "embed-outrun-arcade",
+    "title": "OutRun",
+    "systemId": "arcade",
+    "category": "racing",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_outrun",
+    "coverUrl": "https://archive.org/services/img/arcade_outrun",
+    "detailsUrl": "https://archive.org/details/arcade_outrun"
+  },
+  {
+    "id": "embed-outrun-2026",
+    "title": "OutRun (2026 Edition)",
+    "systemId": "arcade",
+    "category": "racing",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/outrun_202603",
+    "coverUrl": "https://archive.org/services/img/outrun_202603",
+    "detailsUrl": "https://archive.org/details/outrun_202603"
+  },
+  {
+    "id": "embed-midnrun",
+    "title": "Midnight Run: Road Fighter 2",
+    "systemId": "arcade",
+    "category": "racing",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_midnrun",
+    "coverUrl": "https://archive.org/services/img/arcade_midnrun",
+    "detailsUrl": "https://archive.org/details/arcade_midnrun"
+  },
+  {
+    "id": "embed-rtype",
+    "title": "R-Type",
+    "systemId": "arcade",
+    "category": "shooter",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_rtype",
+    "coverUrl": "https://archive.org/services/img/arcade_rtype",
+    "detailsUrl": "https://archive.org/details/arcade_rtype"
+  },
+  {
+    "id": "embed-1943",
+    "title": "1943: The Battle of Midway",
+    "systemId": "arcade",
+    "category": "shooter",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/1943_20250623",
+    "coverUrl": "https://archive.org/services/img/1943_20250623",
+    "detailsUrl": "https://archive.org/details/1943_20250623"
+  },
+  {
+    "id": "embed-joust",
+    "title": "Joust",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_joust",
+    "coverUrl": "https://archive.org/services/img/arcade_joust",
+    "detailsUrl": "https://archive.org/details/arcade_joust"
+  },
+  {
+    "id": "embed-mk",
+    "title": "Mortal Kombat",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/mk_20260125",
+    "coverUrl": "https://archive.org/services/img/mk_20260125",
+    "detailsUrl": "https://archive.org/details/mk_20260125"
+  },
+  {
+    "id": "embed-xmen",
+    "title": "X-Men (Arcade)",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/xmen_20250615_202506",
+    "coverUrl": "https://archive.org/services/img/xmen_20250615_202506",
+    "detailsUrl": "https://archive.org/details/xmen_20250615_202506"
+  },
+  {
+    "id": "embed-gberet-nes",
+    "title": "Green Beret / Rush'n Attack",
+    "systemId": "nes",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/gberet_nes",
+    "coverUrl": "https://archive.org/services/img/gberet_nes",
+    "detailsUrl": "https://archive.org/details/gberet_nes"
+  },
+  {
+    "id": "embed-captcomm",
+    "title": "Captain Commando",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/captcomm",
+    "coverUrl": "https://archive.org/services/img/captcomm",
+    "detailsUrl": "https://archive.org/details/captcomm"
+  },
+  {
+    "id": "embed-ddragon",
+    "title": "Double Dragon",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/ddragon_mame",
+    "coverUrl": "https://archive.org/services/img/ddragon_mame",
+    "detailsUrl": "https://archive.org/details/ddragon_mame"
+  },
+  {
+    "id": "embed-simpsons",
+    "title": "The Simpsons",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/simpsons_mame",
+    "coverUrl": "https://archive.org/services/img/simpsons_mame",
+    "detailsUrl": "https://archive.org/details/simpsons_mame"
+  },
+  {
+    "id": "embed-bombjack",
+    "title": "Bomb Jack",
+    "systemId": "arcade",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/bombjack_mame",
+    "coverUrl": "https://archive.org/services/img/bombjack_mame",
+    "detailsUrl": "https://archive.org/details/bombjack_mame"
+  },
+  {
+    "id": "embed-bublbobl",
+    "title": "Bubble Bobble",
+    "systemId": "arcade",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/bublbobl",
+    "coverUrl": "https://archive.org/services/img/bublbobl",
+    "detailsUrl": "https://archive.org/details/bublbobl"
+  },
+  {
+    "id": "embed-bubble-gbc",
+    "title": "Bubble Bobble (Game Boy Color)",
+    "systemId": "gb",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/bubble_gbc_2",
+    "coverUrl": "https://archive.org/services/img/bubble_gbc_2",
+    "detailsUrl": "https://archive.org/details/bubble_gbc_2"
+  },
+  {
+    "id": "embed-gng-dos",
+    "title": "Ghosts 'n Goblins (DOS)",
+    "systemId": "arcade",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/GNG_DOS",
+    "coverUrl": "https://archive.org/services/img/GNG_DOS",
+    "detailsUrl": "https://archive.org/details/GNG_DOS"
+  },
+  {
+    "id": "embed-bballoon",
+    "title": "Balloon Bomber / B-Balloon",
+    "systemId": "arcade",
+    "category": "shooter",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_bballoon",
+    "coverUrl": "https://archive.org/services/img/arcade_bballoon",
+    "detailsUrl": "https://archive.org/details/arcade_bballoon"
+  },
+  {
+    "id": "embed-commando",
+    "title": "Commando",
+    "systemId": "arcade",
+    "category": "shooter",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/commando_mame",
+    "coverUrl": "https://archive.org/services/img/commando_mame",
+    "detailsUrl": "https://archive.org/details/commando_mame"
+  },
+  {
+    "id": "embed-golden-axe-sg",
+    "title": "Golden Axe (Genesis / Mega Drive)",
+    "systemId": "segaMD",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/sg_Golden_Axe_Rev_1_1989_Sega",
+    "coverUrl": "https://archive.org/services/img/sg_Golden_Axe_Rev_1_1989_Sega",
+    "detailsUrl": "https://archive.org/details/sg_Golden_Axe_Rev_1_1989_Sega"
+  },
+  {
+    "id": "embed-golden-axe-2",
+    "title": "Golden Axe II (Mega Play)",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_mp_gaxe2",
+    "coverUrl": "https://archive.org/services/img/arcade_mp_gaxe2",
+    "detailsUrl": "https://archive.org/details/arcade_mp_gaxe2"
+  },
+  {
+    "id": "embed-gaxeduel",
+    "title": "Golden Axe: The Duel",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_gaxeduel",
+    "coverUrl": "https://archive.org/services/img/arcade_gaxeduel",
+    "detailsUrl": "https://archive.org/details/arcade_gaxeduel"
+  },
+  {
+    "id": "embed-kovsh",
+    "title": "Knights of Valour Super Heroes",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_kovsh",
+    "coverUrl": "https://archive.org/services/img/arcade_kovsh",
+    "detailsUrl": "https://archive.org/details/arcade_kovsh"
+  },
+  {
+    "id": "embed-ddtod",
+    "title": "Dungeons & Dragons: Tower of Doom",
+    "systemId": "arcade",
+    "category": "rpg",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_ddtod",
+    "coverUrl": "https://archive.org/services/img/arcade_ddtod",
+    "detailsUrl": "https://archive.org/details/arcade_ddtod"
+  },
+  {
+    "id": "embed-alien-storm",
+    "title": "Alien Storm (Genesis)",
+    "systemId": "segaMD",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/sg_Alien_Storm_1991_Sega",
+    "coverUrl": "https://archive.org/services/img/sg_Alien_Storm_1991_Sega",
+    "detailsUrl": "https://archive.org/details/sg_Alien_Storm_1991_Sega"
+  },
+  {
+    "id": "embed-sfex2",
+    "title": "Street Fighter EX2",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_sfex2",
+    "coverUrl": "https://archive.org/services/img/arcade_sfex2",
+    "detailsUrl": "https://archive.org/details/arcade_sfex2"
+  },
+  {
+    "id": "embed-ssf2-usa",
+    "title": "Super Street Fighter II (Genesis USA)",
+    "systemId": "segaMD",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/Super_Street_Fighter_II_USA.md",
+    "coverUrl": "https://archive.org/services/img/Super_Street_Fighter_II_USA.md",
+    "detailsUrl": "https://archive.org/details/Super_Street_Fighter_II_USA.md"
+  },
+  {
+    "id": "embed-ssf2-eu",
+    "title": "Super Street Fighter II (Genesis Europe)",
+    "systemId": "segaMD",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/Super_Street_Fighter_II_Europe.md",
+    "coverUrl": "https://archive.org/services/img/Super_Street_Fighter_II_Europe.md",
+    "detailsUrl": "https://archive.org/details/Super_Street_Fighter_II_Europe.md"
+  },
+  {
+    "id": "embed-sf2-flash",
+    "title": "Street Fighter II (Flash Archive)",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/1100_flash_street_fighter_2",
+    "coverUrl": "https://archive.org/services/img/1100_flash_street_fighter_2",
+    "detailsUrl": "https://archive.org/details/1100_flash_street_fighter_2"
+  },
+  {
+    "id": "embed-wonderboy-gg",
+    "title": "Wonder Boy (Game Gear)",
+    "systemId": "segaMS",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/gg_Wonder_Boy_Rev_2_1991SegaEUen",
+    "coverUrl": "https://archive.org/services/img/gg_Wonder_Boy_Rev_2_1991SegaEUen",
+    "detailsUrl": "https://archive.org/details/gg_Wonder_Boy_Rev_2_1991SegaEUen"
+  },
+  {
+    "id": "embed-wonderboy-tw",
+    "title": "Wonder Boy (Sega Rev 1)",
+    "systemId": "segaMS",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/Wonder_Boy_Rev_1_198x_Sega_TW_en",
+    "coverUrl": "https://archive.org/services/img/Wonder_Boy_Rev_1_198x_Sega_TW_en",
+    "detailsUrl": "https://archive.org/details/Wonder_Boy_Rev_1_198x_Sega_TW_en"
+  },
+  {
+    "id": "embed-wonderboy-monster",
+    "title": "Wonder Boy in Monster Land",
+    "systemId": "arcade",
+    "category": "platformer",
+    "provider": "RetroGames.cc",
+    "embedUrl": "https://www.retrogames.cc/embed/34732-wonder-boy-in-monster-land-japan-not-encrypted.html",
+    "detailsUrl": "https://www.retrogames.cc/arcade-games/wonder-boy-in-monster-land-japan-not-encrypted.html"
+  },
+  {
+    "id": "embed-v4tetrs",
+    "title": "Tetris (V4 Arcade)",
+    "systemId": "arcade",
+    "category": "puzzle",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_v4tetrs",
+    "coverUrl": "https://archive.org/services/img/arcade_v4tetrs",
+    "detailsUrl": "https://archive.org/details/arcade_v4tetrs"
+  },
+  {
+    "id": "embed-toyland",
+    "title": "Toy Land Adventure",
+    "systemId": "arcade",
+    "category": "platformer",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_toyland",
+    "coverUrl": "https://archive.org/services/img/arcade_toyland",
+    "detailsUrl": "https://archive.org/details/arcade_toyland"
+  },
+  {
+    "id": "embed-ffight2b",
+    "title": "Final Fight 2 (Arcade)",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_ffight2b",
+    "coverUrl": "https://archive.org/services/img/arcade_ffight2b",
+    "detailsUrl": "https://archive.org/details/arcade_ffight2b"
+  },
+  {
+    "id": "embed-tehkanwc",
+    "title": "Tehkan World Cup",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/arcade_tehkanwc",
+    "coverUrl": "https://archive.org/services/img/arcade_tehkanwc",
+    "detailsUrl": "https://archive.org/details/arcade_tehkanwc"
+  },
+  {
+    "id": "embed-win3-aarcade",
+    "title": "Windows 3.x Arcade Pack",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/win3_aarcade",
+    "detailsUrl": "https://archive.org/details/win3_aarcade",
+    "coverUrl": "https://archive.org/services/img/win3_aarcade"
+  },
+  {
+    "id": "embed-oregon-trail",
+    "title": "The Oregon Trail (1990)",
+    "systemId": "arcade",
+    "category": "rpg",
+    "provider": "Internet Archive",
+    "embedUrl": "https://archive.org/embed/msdos_Oregon_Trail_The_1990",
+    "detailsUrl": "https://archive.org/details/msdos_Oregon_Trail_The_1990",
+    "coverUrl": "https://archive.org/services/img/msdos_Oregon_Trail_The_1990"
+  },
+  {
+    "id": "embed-playpager-chess",
+    "title": "Chess Classic",
+    "systemId": "arcade",
+    "category": "puzzle",
+    "provider": "PlayPager",
+    "embedUrl": "https://playpager.com/embed/chess/index.html",
+    "detailsUrl": "https://playpager.com/"
+  },
+  {
+    "id": "embed-playpager-mill",
+    "title": "Nine Men's Morris (Mill)",
+    "systemId": "arcade",
+    "category": "puzzle",
+    "provider": "PlayPager",
+    "embedUrl": "https://playpager.com/play-mill/index.html",
+    "detailsUrl": "https://playpager.com/"
+  },
+  {
+    "id": "embed-gamezhero",
+    "title": "GamezHero Arcade",
+    "systemId": "arcade",
+    "category": "action",
+    "provider": "GamezHero",
+    "embedUrl": "https://www.gamezhero.com/get-game-code/f51dc802382ce2b548bf73ff0726a31d",
+    "detailsUrl": "https://www.gamezhero.com/"
+  },
+  {
+    "id": "embed-gamepix-40071",
+    "title": "GamePix Retro Challenge",
+    "systemId": "arcade",
+    "category": "arcade",
+    "provider": "GamePix",
+    "embedUrl": "https://games.gamepix.com/play/40071?pid=10013&sid=20015",
+    "detailsUrl": "https://games.gamepix.com/"
+  }
+]

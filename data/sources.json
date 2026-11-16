@@ -1,0 +1,101 @@
+{
+  "romSources": [
+    {
+      "id": "homebrew-hub",
+      "name": "Homebrew Hub (GBDev)",
+      "url": "https://hh.gbdev.io/",
+      "systems": ["gb", "gbc", "gba"],
+      "license": "Open Source / MIT / CC-BY",
+      "description": "Community-curated index of open-source Game Boy and Game Boy Color homebrew games with direct ROM downloads.",
+      "directLoadSupported": true
+    },
+    {
+      "id": "internet-arcade",
+      "name": "Internet Archive — Internet Arcade",
+      "url": "https://archive.org/details/internetarcade",
+      "systems": ["arcade"],
+      "license": "Archival Embed / Public Access",
+      "description": "Thousands of classic arcade cabinets playable via Internet Archive iframe embeds or browsable inside ngames.",
+      "directLoadSupported": true
+    },
+    {
+      "id": "pdroms",
+      "name": "PDRoms Archive",
+      "url": "https://pdroms.de/",
+      "systems": ["nes", "snes", "gb", "gba", "segaMD", "atari2600", "pce"],
+      "license": "Public Domain / Freeware Homebrew",
+      "description": "Long-running preservation directory dedicated strictly to freeware, public domain, and homebrew console ROMs.",
+      "directLoadSupported": false
+    },
+    {
+      "id": "itch-homebrew",
+      "name": "itch.io Retro Homebrew",
+      "url": "https://itch.io/games/free/tag-homebrew",
+      "systems": ["nes", "snes", "gb", "gba", "segaMD"],
+      "license": "Developer Licensed / Freeware",
+      "description": "Independent creators publishing newly developed 8-bit and 16-bit cartridge ROMs.",
+      "directLoadSupported": false
+    },
+    {
+      "id": "libretro-thumbnails",
+      "name": "Libretro Thumbnails CDN",
+      "url": "https://thumbnails.libretro.com/",
+      "systems": ["nes", "snes", "gb", "gba", "segaMD", "psx", "n64", "arcade"],
+      "license": "Community Boxart Repository",
+      "description": "Free public boxart, snaps, and title screen CDN used by RetroArch and ngames for automatic cover art lookup.",
+      "directLoadSupported": true
+    }
+  ],
+  "archivePresets": [
+    {
+      "id": "mame0139-ghostware",
+      "label": "MAME 0.139 Collection (Archive.org)",
+      "itemId": "MAME0.139RomCollectionByGhostware",
+      "defaultSystemId": "arcade",
+      "defaultCore": "mame2003_plus",
+      "description": "Full MAME 0.139 archive file index on archive.org/download/MAME0.139RomCollectionByGhostware"
+    },
+    {
+      "id": "mame2010-nonmerged",
+      "label": "MAME 2010 Non-Merged (Archive.org)",
+      "itemId": "MAME_2010_full_nonmerged_romsets",
+      "defaultSystemId": "arcade",
+      "defaultCore": "fbneo",
+      "description": "MAME 2010 non-merged archive index on archive.org/download/MAME_2010_full_nonmerged_romsets"
+    },
+    {
+      "id": "internet-arcade-search",
+      "label": "Internet Arcade Playable Embeds",
+      "itemId": "collection:internetarcade",
+      "defaultSystemId": "arcade",
+      "defaultCore": "embed",
+      "description": "Searchable playable Internet Archive arcade cabinets launching directly inside the iframe player."
+    }
+  ],
+  "biosSources": [
+    {
+      "id": "retrobios-project",
+      "name": "Abdess / RetroBIOS Reference",
+      "url": "https://github.com/Abdess/retrobios",
+      "license": "MIT (Tooling & Metadata)",
+      "description": "Open-source BIOS verification schemas, checksum database, and emulator system compatibility matrix.",
+      "notes": "ngames uses RetroBIOS metadata conventions for local checksum verification. No proprietary BIOS files are bundled."
+    },
+    {
+      "id": "emulatorjs-docs",
+      "name": "EmulatorJS Official Documentation",
+      "url": "https://emulatorjs.org/docs/",
+      "license": "GPLv3",
+      "description": "Official core configuration, BIOS path rules, and supported archive format documentation for EmulatorJS.",
+      "notes": "Powered locally via self-hosted EmulatorJS v4.2.3."
+    },
+    {
+      "id": "libretro-docs",
+      "name": "Libretro Core BIOS Docs",
+      "url": "https://docs.libretro.com/",
+      "license": "CC-BY-SA",
+      "description": "Upstream core-by-core BIOS filename, MD5/SHA-256 checksum, and HLE fallback references.",
+      "notes": "Covers FCEUmm, Snes9x, mGBA, Gambatte, Genesis Plus GX, PCSX ReARMed, and FinalBurn Neo."
+    }
+  ]
+}
